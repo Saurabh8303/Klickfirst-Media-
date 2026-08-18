@@ -29,26 +29,11 @@ const TitleGenerator = () => {
     setTitles([]);
 
     try {
-      const response = await fetch(
-        'https://api.groq.com/openai/v1/chat/completions',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.REACT_APP_GROQ_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: 'llama-3.3-70b-versatile',
-            messages: [
-              {
-                role: 'user',
-                content: `Generate 10 viral YouTube titles for this topic: ${topic}. Use power words, numbers, and curiosity gaps. Return ONLY a numbered list of 10 titles, no extra text.`,
-              },
-            ],
-            max_tokens: 500,
-          }),
-        }
-      );
+      const response = await fetch('/api/generate-title', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic }),
+      });
 
       if (!response.ok) {
         throw new Error(`API request failed with status ${response.status}`);
