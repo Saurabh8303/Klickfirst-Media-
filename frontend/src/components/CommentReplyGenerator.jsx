@@ -50,26 +50,11 @@ const CommentReplyGenerator = () => {
     setReplies([]);
 
     try {
-      const response = await fetch(
-        'https://api.groq.com/openai/v1/chat/completions',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.REACT_APP_GROQ_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: 'llama-3.3-70b-versatile',
-            messages: [
-              {
-                role: 'user',
-                content: `Generate 3 reply options for this comment: ${comment}. Tone: ${tone}. Each reply under 3 sentences, sound human and natural. Format exactly: Option 1: [reply] Option 2: [reply] Option 3: [reply]. Nothing else.`,
-              },
-            ],
-            max_tokens: 300,
-          }),
-        }
-      );
+      const response = await fetch('/api/generate-comment-reply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ comment, tone }),
+      });
 
       if (!response.ok) {
         throw new Error(`API request failed with status ${response.status}`);
